@@ -20,6 +20,7 @@ public:
 
     ~My_string();
 
+    My_string &operator=(const My_string &other) noexcept;
     My_string &operator=(My_string &&other) noexcept;
     My_string &operator=(const char *char_ptr) noexcept;
 

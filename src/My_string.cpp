@@ -168,6 +168,18 @@ char *My_string::operator()(const char *substring) const {
     return res ? res : nullptr;
 }
 
+My_string &My_string::operator=(const My_string &other) noexcept {
+    char *new_c_str = new char[other.size + 1];
+    copy_n(other.c_str, other.size + 1, new_c_str);
+
+    delete [] c_str;
+
+    c_str = new_c_str;
+    size = other.size;
+
+    return *this;
+}
+
 ostream &operator<<(ostream &os, const My_string &str) {
     cout << str.get();
     return os;
