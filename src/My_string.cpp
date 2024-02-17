@@ -30,23 +30,27 @@ My_string::~My_string() {
     delete [] c_str;
 }
 
+
 My_string &My_string::operator=(My_string &&other) noexcept {
+    swap(*this, other);
+    return *this;
+}
+
+My_string &My_string::operator=(const char *char_ptr) {
+    size_t len = strlen(char_ptr) + 1;
+    char *new_c_str = new char[len];
+    copy_n(char_ptr, len, new_c_str);
+
     delete [] c_str;
 
-    c_str = new char[other.size];
-    strcpy(c_str, other.c_str);
-    size = other.size;
-
-    other.~My_string();
+    c_str = new_c_str;
+    size = len;
 
     return *this;
 }
 
-My_string &My_string::operator=(const char *char_ptr) noexcept {
-    delete [] c_str;
-    strcpy(c_str, char_ptr);
-    size = strlen(char_ptr);
-
+My_string &My_string::operator=(const My_string &other) {
+    *this = other.c_str;
     return *this;
 }
 
@@ -89,7 +93,7 @@ My_string My_string::operator*(size_t n) const {
     return res;
 }
 
-//возвращает функцию которая проверяет содержиться ли c в строке operand
+//возвращает функцию которая проверяет содержиться ли C в строке operand
 auto get_find_pred(const My_string &operand) {
     return [operand](char c) -> bool {
         auto end = operand.get() + operand.get_size();
@@ -99,9 +103,9 @@ auto get_find_pred(const My_string &operand) {
 
 My_string My_string::operator-(const My_string &operand) const {
     char *res_c_str = new char[1 + count_if(c_str, c_str + size, get_find_pred(operand))];
+
     size_t curr_index = 0;
     size_t i = 0;
-
     for (; i < size; ++i) {
         if (get_find_pred(operand)(c_str[i])) {
             res_c_str[curr_index++] = c_str[i];
@@ -149,7 +153,7 @@ bool My_string::operator>=(const My_string &operand) const {
 My_string My_string::operator!() const {
     My_string res(c_str);
     for (size_t i = 0; i < size; ++i) {
-        res.c_str[i] = isupper(c_str[i]) ? tolower(c_str[i], locale()) : toupper(c_str[i]);
+        res.c_str[i] = isupper(c_str[i]) ? tolower(c_str[i], locale()) : toupper(c_str[i], locale());
     }
 
     return res;
@@ -168,16 +172,9 @@ char *My_string::operator()(const char *substring) const {
     return res ? res : nullptr;
 }
 
-My_string &My_string::operator=(const My_string &other) noexcept {
-    char *new_c_str = new char[other.size + 1];
-    copy_n(other.c_str, other.size + 1, new_c_str);
-
-    delete [] c_str;
-
-    c_str = new_c_str;
-    size = other.size;
-
-    return *this;
+void swap(My_string &left, My_string &right) {
+    swap(left.c_str, right.c_str);
+    swap(left.size, right.size);
 }
 
 ostream &operator<<(ostream &os, const My_string &str) {
