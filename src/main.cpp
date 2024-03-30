@@ -1,17 +1,16 @@
-#include "../includes/My_string.h"
+#include "../includes/String.h"
 
 #include <iostream>
 
-const My_string &get_shorter(const My_string &s1, const My_string &s2) {
+const String &get_shorter(const String &s1, const String &s2) {
     return (s1.get_size() > s2.get_size()) ? s1 : s2;
 }
 
-
 int main() {
-    My_string s1("123");
-    My_string s("1");
+    String s1("123");
+    String s("1");
     s = std::move(s1);
-    My_string s2("1");
+    String s2("1");
     s2 = "12";
 
     return 0;
