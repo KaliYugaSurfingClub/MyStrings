@@ -18,7 +18,7 @@ public:
     explicit My_string(char c);
     explicit My_string(const string &str) : My_string(str.c_str()) {}
     My_string(const My_string &other) : My_string(other.get()) {}
-    My_string(My_string &&other) noexcept : My_string(other.get()) {}
+    My_string(My_string &&other) noexcept;
     My_string() : My_string('\0') {}
 
     ~My_string();

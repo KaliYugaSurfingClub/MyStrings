@@ -37,20 +37,16 @@ My_string &My_string::operator=(My_string &&other) noexcept {
 }
 
 My_string &My_string::operator=(const char *char_ptr) {
-    size_t len = strlen(char_ptr) + 1;
-    char *new_c_str = new char[len];
-    copy_n(char_ptr, len, new_c_str);
-
-    delete [] c_str;
-
-    c_str = new_c_str;
-    size = len;
-
+    *this = My_string(char_ptr);
     return *this;
 }
 
 My_string &My_string::operator=(const My_string &other) {
-    *this = other.c_str;
+    if (this != &other) {
+        delete c_str;
+        *this = My_string(other);
+    }
+
     return *this;
 }
 
@@ -177,6 +173,10 @@ void swap(My_string &left, My_string &right) {
     swap(left.size, right.size);
 }
 
+My_string::My_string(My_string &&other) noexcept {
+    swap(*this, other);
+}
+
 ostream &operator<<(ostream &os, const My_string &str) {
     cout << str.get();
     return os;
@@ -185,6 +185,7 @@ ostream &operator<<(ostream &os, const My_string &str) {
 istream &operator>>(istream &is, My_string &str) {
     cin >> noskipws ;
     for (char c = '\0'; cin >> c && !isspace(c); str = str + c);
+    is.clear();
     return is;
 }
 
