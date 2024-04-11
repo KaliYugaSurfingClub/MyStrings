@@ -134,16 +134,16 @@ bool String::operator<(const String &operand) const {
     return size < operand.size;
 }
 
-bool String::operator<=(const String &operand) const {
-    return *this == operand || *this < operand;
+bool String::operator>(const String &operand) const {
+    return operand < *this;
 }
 
-bool String::operator>(const String &operand) const {
-    return !(*this < operand);
+bool String::operator<=(const String &operand) const {
+    return !(*this > operand);
 }
 
 bool String::operator>=(const String &operand) const {
-    return *this == operand || *this > operand;
+    return !(*this < operand);
 }
 
 String String::operator!() const {
